@@ -19,7 +19,7 @@ pyinstaller \
   --clean \
   --add-data "templates:templates" \
   --add-data "static:static" \
-  --add-data "README_CN.md:." \
+  --add-data "README.md:." \
   app.py
 
 cp run.sh release/ || true
