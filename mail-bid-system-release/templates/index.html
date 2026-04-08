@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>邮件投标系统</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="hero shell">
+    <div class="hero-top">
+      <div>
+        <h1>邮件投标系统</h1>
+        <p>单机精准投递 | 固定时区 Asia/Shanghai</p>
+      </div>
+      <div class="hero-badges">
+        <span class="badge">投标场景</span>
+        <span class="badge">定时投递</span>
+        <span class="badge">完整追踪</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout shell">
+    <section class="panel card">
+      <div class="panel-head">
+        <h2>投递任务创建</h2>
+        <span class="badge badge-subtle">表单配置</span>
+      </div>
+      <form id="send-form">
+        <div class="grid">
+          <label>SMTP Host <input name="host" value="127.0.0.1" /></label>
+          <label>SMTP Port <input name="port" value="25" /></label>
+          <label>用户名 <input name="username" /></label>
+          <label>密码 <input name="password" type="password" /></label>
+          <label><input type="checkbox" name="use_tls" /> STARTTLS</label>
+          <label><input type="checkbox" name="use_ssl" /> SSL</label>
+
+          <label>发件人 From <input name="sender" /></label>
+          <label>收件人 To <input name="recipient" /></label>
+          <label>主题 Subject <input name="subject" /></label>
+          <div class="editor-wrap field-wide">
+            <span class="editor-label">正文编辑（富文本）</span>
+            <div class="editor-toolbar" id="editor-toolbar">
+              <button type="button" data-cmd="bold"><b>B</b></button>
+              <button type="button" data-cmd="italic"><i>I</i></button>
+              <button type="button" data-cmd="underline"><u>U</u></button>
+              <button type="button" data-cmd="insertUnorderedList">• 列表</button>
+              <button type="button" data-cmd="createLink">链接</button>
+              <button type="button" data-cmd="removeFormat">清格式</button>
+            </div>
+            <div id="body-editor" class="body-editor" contenteditable="true"></div>
+          </div>
+
+          <label>投递次数
+            <select name="attempt_count" id="attempt-count">
+              <option value="1" selected>1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </label>
+
+          <label>第一次时间 (YYYY-MM-DD HH:MM:SS)
+            <input type="datetime-local" step="1" id="first-send-at" />
+          </label>
+
+          <label id="second-wrap">第二次时间 (YYYY-MM-DD HH:MM:SS)
+            <input type="datetime-local" step="1" id="second-send-at" />
+          </label>
+
+          <label id="third-wrap">第三次时间 (YYYY-MM-DD HH:MM:SS)
+            <input type="datetime-local" step="1" id="third-send-at" />
+          </label>
+
+          <label><input type="checkbox" name="use_ntp" /> 启用 NTP</label>
+          <label>NTP 服务器 <input name="ntp_server" value="pool.ntp.org" /></label>
+          <label><input type="checkbox" name="save_outbox" checked /> 保存 Outbox</label>
+        </div>
+
+        <label class="field-wide">附件（可多选）
+          <input type="file" name="attachments" multiple />
+        </label>
+
+        <div class="row actions">
+          <button type="submit" class="btn-primary">提交任务</button>
+          <button type="button" id="refresh-deliveries" class="btn-outline">刷新投递列表</button>
+        </div>
+      </form>
+    </section>
+
+    <div class="right-col">
+      <section class="panel card">
+        <div class="panel-head">
+          <h2>任务实时日志</h2>
+          <span class="badge badge-subtle">实时轮询</span>
+        </div>
+        <pre id="task-log" class="log"></pre>
+      </section>
+
+      <section class="panel card">
+        <div class="panel-head">
+          <h2>投递追踪</h2>
+          <span class="badge badge-subtle">按 delivery_id</span>
+        </div>
+        <div id="deliveries" class="deliveries"></div>
+        <pre id="delivery-events" class="log"></pre>
+      </section>
+    </div>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
